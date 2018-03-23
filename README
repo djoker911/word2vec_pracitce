@@ -1,0 +1,31 @@
+在linux環境上安裝opencc
+https://segmentfault.com/a/1190000010122544
+(要自己從git拉下來用cmake套件裝)
+
+wiki上面要抓"pages-articles.xml.bz2”結尾的
+"articles-multistream.xml.bz2”結尾的在python的
+gensim.corpora 的 WikiCorpus是不吃的
+
+在跑完擷取文章內容成xml之後WikiExtract()
+因為內文簡繁夾雜
+所以這邊用opencc指令全部轉成繁體
+opencc -i 輸入的檔案 -o 輸出的檔案 -c s2t.json
+
+最後那個-c是要從什麼轉什麼
+以上例來說 simplified to traditional 簡轉繁
+如果要顛倒就 t2s.json
+
+ZhSplit()是利用結巴斷詞, 要準備詞庫跟停用字
+一樣有用opencc做簡轉繁
+
+斷完之後訓練, 會得到三個檔案
+word2vec.model
+word2vec.model.trainables.syn1neg.npy
+word2vec.model.wv.vectors.npy
+
+然後測試的時候只要把.model load進來就好
+但是其他兩個檔案都要在 不然會噴掉
+
+遇到沒有的字會噴掉
+
+有model之後w2v_tester.py有三個模式, 找相似字, 找兩字相似度, 邏輯推導(國王-男人+女人=皇后)
